@@ -3,6 +3,7 @@
 #include "player.h"
 #include "obstacle.h"
 #include "gold.h"
+#include "dungeongenerator.h"
 
 #include <QSize>
 #include <QDebug>
@@ -86,7 +87,9 @@ bool MapModel::movePlayer(MapModel::Direction direction)
                 return false;
         }
 
-        if (Player::instance()->row() + addend < 0)
+        if (direction == Up && Player::instance()->row() + addend < 0)
+            return false;
+        if (direction == Down && Player::instance()->row() + addend >= rowCount())
             return false;
 
         Player::instance()->setRow(Player::instance()->row() + addend);
@@ -103,7 +106,9 @@ bool MapModel::movePlayer(MapModel::Direction direction)
             if (!m_objects.value(newIndex)->isPassable())
                 return false;
 
-        if (Player::instance()->column() + addend < 0)
+        if (direction == Left && Player::instance()->column() + addend < 0)
+            return false;
+        if (direction == Right && Player::instance()->column() + addend >= columnCount())
             return false;
 
         Player::instance()->setColumn(Player::instance()->column() + addend);
@@ -136,40 +141,10 @@ void MapModel::init(int rowCount, int columnCount, int obstacleCount)
     Player::instance()->setColumn(columnCount / 2);
     m_rowCount = rowCount;
     m_columnCount = columnCount;
-    createObjects(obstacleCount, 5);
+    DungeonGenerator generator(this);
+    m_objects = generator.generateDungeon();
 
     emit layoutChanged();
-}
-
-void MapModel::createObjects(int obstacleCount, int goldCount)
-{
-    QList<QModelIndex> allIdx;
-    for (int row = 0; row < rowCount(); row++) {
-        for (int column = 0; column < columnCount(); column++) {
-            allIdx.append(index(row, column));
-        }
-    }
-
-    Randomizer rd;
-
-    int obstacles = 0;
-    while(obstacles < obstacleCount ) {
-        int random = rd.randInt(0, allIdx.size() - 1);
-        QModelIndex randomIndex = allIdx.at(random);
-        if(!m_objects.contains(randomIndex) && randomIndex != currentPlayerIndex()){
-            m_objects.insert(randomIndex, new Obstacle());
-            obstacles++;
-        }
-    }
-    int gold = 0;
-    while(gold < goldCount ) {
-        int random = rd.randInt(0, allIdx.size() - 1);
-        QModelIndex randomIndex = allIdx.at(random);
-        if(!m_objects.contains(randomIndex) && randomIndex != currentPlayerIndex()){
-            m_objects.insert(randomIndex, new Gold());
-            gold++;
-        }
-    }
 }
 
 void MapModel::removeObject(const QModelIndex &index)

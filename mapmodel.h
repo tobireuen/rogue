@@ -24,7 +24,7 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
     enum Direction {
         Left,
@@ -40,7 +40,7 @@ public slots:
     void init(int rowCount, int columnCount, int obstacleCount);
 
 protected:
-    void createObjects(int obstacleCount, int goldCount);
+    void createObjects(int goldCount);
     void removeObject(const QModelIndex &index);
     void collectObject(const QModelIndex &index);
 

@@ -5,6 +5,8 @@
 
 #include <QAbstractItemModel>
 #include <QObject>
+#include <QList>
+#include <QModelIndex>
 
 class DungeonGenerator : public QObject
 {
@@ -16,12 +18,15 @@ public:
 
 private:
     void createRandom(QHash<QModelIndex, AbstractMapItem*>& hash);
+    void smoothOutDungeon(QHash<QModelIndex, AbstractMapItem*>& hash);
+    void createObjects(QHash<QModelIndex, AbstractMapItem *> &hash, int goldCount);
 
+    int obstaclesInPattern(const QModelIndex &centerIndex, QHash<QModelIndex, AbstractMapItem *> &hash);
+
+    QList<QModelIndex> getAllIndexes() const;
+
+private:
     QAbstractItemModel *m_model;
-
-signals:
-
-public slots:
 };
 
 #endif // DUNGEONGENERATOR_H

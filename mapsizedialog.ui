@@ -27,7 +27,7 @@
       <number>5</number>
      </property>
      <property name="maximum">
-      <number>25</number>
+      <number>100</number>
      </property>
     </widget>
    </item>
@@ -57,7 +57,7 @@
       <number>5</number>
      </property>
      <property name="maximum">
-      <number>25</number>
+      <number>100</number>
      </property>
     </widget>
    </item>
@@ -93,7 +93,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>203</x>
-     <y>139</y>
+     <y>167</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -109,7 +109,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>203</x>
-     <y>139</y>
+     <y>167</y>
     </hint>
     <hint type="destinationlabel">
      <x>214</x>
