@@ -2,6 +2,7 @@
 #define MAP_H
 
 #include "abstractmapitem.h"
+#include "dungeon.h"
 #include "player.h"
 
 #include <QAbstractTableModel>
@@ -13,8 +14,7 @@ class MapModel : public QAbstractTableModel
     typedef QAbstractTableModel SUPER;
 
 public:
-    explicit MapModel(QObject* parent = 0);
-    explicit MapModel(int rowCount, int columnCount, int obstacleCount, QObject *parent = 0);
+    explicit MapModel(int rowCount, int columnCount, QObject *parent = 0);
 
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -37,11 +37,10 @@ public:
 
 public slots:
     void reset();
-    void init(int rowCount, int columnCount, int obstacleCount);
+    void init(int rowCount, int columnCount);
 
 protected:
-    void createObjects(int goldCount);
-    void removeObject(const QModelIndex &index);
+
     void collectObject(const QModelIndex &index);
 
     QModelIndex currentPlayerIndex() const;
@@ -50,11 +49,11 @@ private slots:
     void onPlayerMoved(int oldRow, int row, int oldColumn, int column);
 
 private:
+    Dungeon* m_dungeon;
 
     int m_rowCount = 0;
     int m_columnCount = 0;
 
-    QHash<QModelIndex, AbstractMapItem*> m_objects;
 };
 
 #endif // MAP_H

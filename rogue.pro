@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     gold.cpp \
     playerinfowidget.cpp \
     abstractcollectibleitem.cpp \
-    dungeongenerator.cpp
+    dungeongenerator.cpp \
+    dungeon.cpp
 
 HEADERS  += mainwindow.h \
     mapview.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwindow.h \
     gold.h \
     playerinfowidget.h \
     abstractcollectibleitem.h \
-    dungeongenerator.h
+    dungeongenerator.h \
+    dungeon.h
 
 FORMS    += mainwindow.ui \
     mapsizedialog.ui \

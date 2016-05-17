@@ -10,6 +10,7 @@ public:
     explicit Randomizer(QObject *parent = 0);
 
     int randInt(int low, int high) const;
+    double randDouble(double low, double high) const;
 
 };
 

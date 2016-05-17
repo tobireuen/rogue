@@ -2,10 +2,9 @@
 #define DUNGEONGENERATOR_H
 
 #include "abstractmapitem.h"
+#include "dungeon.h"
 
-#include <QAbstractItemModel>
 #include <QObject>
-#include <QList>
 #include <QModelIndex>
 
 class DungeonGenerator : public QObject
@@ -14,18 +13,16 @@ class DungeonGenerator : public QObject
 public:
     explicit DungeonGenerator(QAbstractItemModel *model, QObject *parent = 0);
 
-    QHash<QModelIndex, AbstractMapItem*> generateDungeon();
+    Dungeon* generate();
 
 private:
-    void createRandom(QHash<QModelIndex, AbstractMapItem*>& hash);
-    void smoothOutDungeon(QHash<QModelIndex, AbstractMapItem*>& hash);
-    void createObjects(QHash<QModelIndex, AbstractMapItem *> &hash, int goldCount);
+    void initialiseMap(double obstacleChance);
+    void smoothOutDungeon();
 
-    int obstaclesInPattern(const QModelIndex &centerIndex, QHash<QModelIndex, AbstractMapItem *> &hash);
-
-    QList<QModelIndex> getAllIndexes() const;
+    int countAliveNeighbours(const QModelIndex &index);
 
 private:
+    Dungeon *m_dungeon;
     QAbstractItemModel *m_model;
 };
 

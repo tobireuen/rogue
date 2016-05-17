@@ -26,7 +26,7 @@ private:
     Ui::MainWindow *m_ui;
 
     MapSizeDialog *m_dialog;
-    MapModel *m_model;
+    MapModel *m_model = 0;
 };
 
 #endif // MAINWINDOW_H
