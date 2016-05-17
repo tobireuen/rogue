@@ -6,8 +6,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::MainWindow),
-    m_dialog(new MapSizeDialog(this)),
-    m_model(new MapModel(this))
+    m_dialog(new MapSizeDialog(this))
 {
     m_ui->setupUi(this);
 
@@ -31,7 +30,7 @@ void MainWindow::reset()
     m_model->reset();
 
     if (m_dialog->exec() == QDialog::Accepted) {
-        m_model->init(m_dialog->rowCount(), m_dialog->columnCount(), m_dialog->obstacleCount());
+        m_model->init(m_dialog->rowCount(), m_dialog->columnCount());
     }
 
     show();
@@ -43,7 +42,11 @@ void MainWindow::init()
     m_ui->tableViewMap->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     if (m_dialog->exec() == QDialog::Accepted) {
-        m_model->init(m_dialog->rowCount(), m_dialog->columnCount(), m_dialog->obstacleCount());
+
+        if(m_model)
+            delete m_model;
+
+        m_model = new MapModel(m_dialog->rowCount(), m_dialog->columnCount(), this);
         m_ui->tableViewMap->setModel(m_model);
     }
 
