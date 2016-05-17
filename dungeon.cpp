@@ -24,7 +24,7 @@ bool Dungeon::containsObjectAtIndex(const QModelIndex &index)
         return true;
 }
 
-void Dungeon::setObjectAtIndex(const QModelIndex &index, AbstractMapItem *itemType)
+void Dungeon::createObjectAtIndex(const QModelIndex &index, AbstractMapItem *itemType)
 {
     if(!index.isValid())
         return;

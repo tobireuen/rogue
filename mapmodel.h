@@ -42,11 +42,13 @@ public slots:
 protected:
 
     void collectObject(const QModelIndex &index);
+    void setPlayer();
 
     QModelIndex currentPlayerIndex() const;
 
 private slots:
     void onPlayerMoved(int oldRow, int row, int oldColumn, int column);
+    void onObjectChanged(const QModelIndex &index);
 
 private:
     Dungeon* m_dungeon;

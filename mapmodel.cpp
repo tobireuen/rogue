@@ -139,10 +139,11 @@ void MapModel::init(int rowCount, int columnCount)
 
     DungeonGenerator generator(this);
     m_dungeon = generator.generate();
+    connect(m_dungeon, &Dungeon::objectAdded, this, &MapModel::onObjectChanged);
+    connect(m_dungeon, &Dungeon::objectRemoved, this, &MapModel::onObjectChanged);
     m_dungeon->setParent(this);
 
-    Player::instance()->setRow(rowCount / 2);
-    Player::instance()->setColumn(columnCount / 2);
+    setPlayer();
 
     emit layoutChanged();
 }
@@ -166,6 +167,21 @@ void MapModel::collectObject(const QModelIndex &index)
         m_dungeon->removeObjectAtIndex(index);
 }
 
+void MapModel::setPlayer()
+{
+    Randomizer rd;
+    int randomColumn = rd.randInt(1, m_columnCount - 1);
+    int randomRow = rd.randInt(1, m_rowCount - 1);
+
+    if(!m_dungeon->containsObjectAtIndex(index(randomRow, randomColumn))){
+        Player::instance()->setRow(randomRow);
+        Player::instance()->setColumn(randomColumn);
+    }
+    else {
+        setPlayer();
+    }
+}
+
 QModelIndex MapModel::currentPlayerIndex() const
 {
     return index(Player::instance()->row(), Player::instance()->column());
@@ -174,6 +190,11 @@ QModelIndex MapModel::currentPlayerIndex() const
 void MapModel::onPlayerMoved(int oldRow, int row, int oldColumn, int column)
 {
     emit dataChanged(index(oldRow, oldColumn), index(row, column), QVector<int>() << Qt::DisplayRole);
+}
+
+void MapModel::onObjectChanged(const QModelIndex &index)
+{
+    emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
 }
 
 

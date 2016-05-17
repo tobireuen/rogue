@@ -17,7 +17,10 @@ public:
 
 private:
     void initialiseMap(double obstacleChance);
-    void smoothOutDungeon();
+    void smoothOutDungeon(int birthlimit, int deathlimit);
+    void createBorders();
+    void tweakDungeon(int birthlimit, int deathlimit, int steps);
+    void placeTreasure(int hiddenTreasureLimit);
 
     int countAliveNeighbours(const QModelIndex &index);
 

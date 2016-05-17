@@ -24,7 +24,7 @@ public:
 
     bool containsObjectAtIndex(const QModelIndex &index);
 
-    void setObjectAtIndex(const QModelIndex &index, AbstractMapItem *itemType);
+    void createObjectAtIndex(const QModelIndex &index, AbstractMapItem *itemType);
     void removeObjectAtIndex(const QModelIndex &index);
 
 private:
