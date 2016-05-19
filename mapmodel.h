@@ -4,6 +4,7 @@
 #include "abstractmapitem.h"
 #include "dungeon.h"
 #include "player.h"
+#include "constants.h"
 
 #include <QAbstractTableModel>
 #include <QList>
@@ -26,13 +27,6 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    enum Direction {
-        Left,
-        Right,
-        Up,
-        Down
-    };
-
     bool movePlayer(Direction direction);
 
 public slots:
@@ -49,6 +43,7 @@ protected:
 private slots:
     void onPlayerMoved(int oldRow, int row, int oldColumn, int column);
     void onObjectChanged(const QModelIndex &index);
+    void onObjectAboutToMove(const QModelIndex &srcIndex, Direction direction);
 
 private:
     Dungeon* m_dungeon;

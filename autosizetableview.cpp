@@ -1,6 +1,6 @@
 #include "autosizetableview.h"
 
-AutoSizeTableView::AutoSizeTableView(QWidget* parent = 0)
+AutoSizeTableView::AutoSizeTableView(QWidget* parent)
     : SUPER(parent)
 {
 

@@ -76,7 +76,7 @@ Qt::ItemFlags MapModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled;
 }
 
-bool MapModel::movePlayer(MapModel::Direction direction)
+bool MapModel::movePlayer(Direction direction)
 {
     if (direction == Up || direction == Down){
         int addend = (direction == Up ? -1 : 1);
@@ -138,9 +138,11 @@ void MapModel::init(int rowCount, int columnCount)
     m_columnCount = columnCount;
 
     DungeonGenerator generator(this);
-    m_dungeon = generator.generate();
+    //    m_dungeon = generator.generateRooms();
+    m_dungeon = generator.generateCaves();
     connect(m_dungeon, &Dungeon::objectAdded, this, &MapModel::onObjectChanged);
     connect(m_dungeon, &Dungeon::objectRemoved, this, &MapModel::onObjectChanged);
+    connect(m_dungeon, &Dungeon::objectAboutToMove, this, &MapModel::onObjectAboutToMove);
     m_dungeon->setParent(this);
 
     setPlayer();
@@ -195,6 +197,29 @@ void MapModel::onPlayerMoved(int oldRow, int row, int oldColumn, int column)
 void MapModel::onObjectChanged(const QModelIndex &index)
 {
     emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
+}
+
+void MapModel::onObjectAboutToMove(const QModelIndex &srcIndex, Direction direction)
+{
+    QModelIndex destinationIndex;
+    switch (direction) {
+    case Up:
+        destinationIndex = index(srcIndex.row() - 1, srcIndex.column());
+        break;
+    case Down:
+        destinationIndex = index(srcIndex.row() + 1, srcIndex.column());
+        break;
+    case Left:
+        destinationIndex = index(srcIndex.row(), srcIndex.column() - 1);
+        break;
+    case Right:
+        destinationIndex = index(srcIndex.row(), srcIndex.column() + 1);
+        break;
+    default:
+        break;
+    }
+    if(!m_dungeon->containsObjectAtIndex(destinationIndex) && currentPlayerIndex() != destinationIndex)
+        m_dungeon->moveObject(srcIndex, destinationIndex);
 }
 
 

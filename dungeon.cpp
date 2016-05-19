@@ -1,7 +1,9 @@
 #include "dungeon.h"
+#include "player.h"
 
 Dungeon::Dungeon(QObject *parent) : QObject(parent)
 {
+    connect(Player::instance(), &Player::moved, this, &Dungeon::moveNPCs);
 }
 
 void Dungeon::reset()
@@ -33,8 +35,35 @@ void Dungeon::createObjectAtIndex(const QModelIndex &index, AbstractMapItem *ite
     emit objectAdded(index);
 }
 
+void Dungeon::moveObject(const QModelIndex &srcIndex, const QModelIndex &destinationIndex)
+{
+    AbstractMapItem* object = m_objects.take(srcIndex);
+    m_objects.insert(destinationIndex, object);
+
+    emit objectRemoved(srcIndex);
+    emit objectAdded(destinationIndex);
+
+    AbstractNPC* npc = qobject_cast<AbstractNPC*>(object);
+    if(!npc)
+        return;
+
+    npc->onMoved();
+}
+
 void Dungeon::removeObjectAtIndex(const QModelIndex &index)
 {
+    //    m_objects.remove(index);
     delete m_objects.take(index);
     emit objectRemoved(index);
+}
+
+void Dungeon::moveNPCs()
+{
+    for(AbstractMapItem* item : m_objects.values()){
+        AbstractNPC* npc = qobject_cast<AbstractNPC*>(item);
+        if(!npc)
+            continue;
+        QModelIndex index = m_objects.key(npc);
+        emit objectAboutToMove(index, npc->nextDirection());
+    }
 }

@@ -32,7 +32,6 @@ int Player::column() const
 
 void Player::setRow(int row)
 {
-
     if(m_row != row){
         int oldRow = m_row;
         m_row = row;
@@ -51,15 +50,31 @@ void Player::setColumn(int column)
     }
 }
 
+int Player::health() const
+{
+    return m_health;
+}
+
 int Player::goldCount() const
 {
     return m_goldCount;
+}
+
+void Player::getDamage(int damage)
+{
+    setHealth(health() - damage);
 }
 
 void Player::setGoldCount(int goldCount)
 {
     m_goldCount = goldCount;
     emit goldChanged(m_goldCount);
+}
+
+void Player::setHealth(int health)
+{
+    m_health = health;
+    emit healthChanged(m_health);
 }
 
 void Player::addGold(int gold)

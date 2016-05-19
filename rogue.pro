@@ -25,7 +25,11 @@ SOURCES += main.cpp\
     playerinfowidget.cpp \
     abstractcollectibleitem.cpp \
     dungeongenerator.cpp \
-    autosizetableview.cpp
+    autosizetableview.cpp \
+    dungeon.cpp \
+    abstractnpc.cpp \
+    monster.cpp \
+    moveset.cpp
 
 HEADERS  += mainwindow.h \
     mapview.h \
@@ -39,7 +43,12 @@ HEADERS  += mainwindow.h \
     playerinfowidget.h \
     abstractcollectibleitem.h \
     dungeongenerator.h \
-    autosizetableview.h
+    autosizetableview.h \
+    constants.h \
+    dungeon.h \
+    abstractnpc.h \
+    monster.h \
+    moveset.h
 
 FORMS    += mainwindow.ui \
     mapsizedialog.ui \

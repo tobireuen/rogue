@@ -21,16 +21,16 @@ void MapView::keyPressEvent(QKeyEvent *event)
 
     switch (event->key()) {
     case Qt::Key_W:
-        mapModel->movePlayer(MapModel::Up);
+        mapModel->movePlayer(Up);
         break;
     case Qt::Key_S:
-        mapModel->movePlayer(MapModel::Down);
+        mapModel->movePlayer(Down);
         break;
     case Qt::Key_A:
-        mapModel->movePlayer(MapModel::Left);
+        mapModel->movePlayer(Left);
         break;
     case Qt::Key_D:
-        mapModel->movePlayer(MapModel::Right);
+        mapModel->movePlayer(Right);
         break;
     default:
         break;
