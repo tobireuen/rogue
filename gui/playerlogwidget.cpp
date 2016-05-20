@@ -3,7 +3,7 @@
 
 PlayerLogWidget::PlayerLogWidget(QWidget *parent) : SUPER(parent)
 {
-  connect(PlayerLog::instance(), &PlayerLog::newInfo, this, &PlayerLogWidget::onNewInfo);
+  connect(&PlayerLog::instance(), &PlayerLog::newInfo, this, &PlayerLogWidget::onNewInfo);
   setPlainText("Welcome!");
 }
 

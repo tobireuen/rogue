@@ -19,7 +19,7 @@ int AbstractCombatItem::health() const
 
 void AbstractCombatItem::getDamage(int damage)
 {
-    PlayerLog::instance()<<QString("got damage");
+    PlayerLog::instance() << QString("got damage");
     setHealth(health() - damage);
 }
 
