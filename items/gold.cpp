@@ -6,7 +6,7 @@ Gold::Gold(QObject *parent) : AbstractCollectibleItem(parent)
 
 }
 
-bool Gold::onEntered()
+bool Gold::onEntered() const
 {
     Player::instance()->addGold(1);
     return true;

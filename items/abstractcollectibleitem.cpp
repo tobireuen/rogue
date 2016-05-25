@@ -14,7 +14,3 @@ bool AbstractCollectibleItem::isCollectible() const
     return true;
 }
 
-bool AbstractCollectibleItem::onEntered()
-{
-    return false;
-}

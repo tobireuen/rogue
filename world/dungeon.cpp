@@ -1,9 +1,10 @@
 #include "dungeon.h"
 #include "player.h"
 
+#include <obstacle.h>
+
 Dungeon::Dungeon(QObject *parent) : QObject(parent)
 {
-    //connect(Player::instance(), &Player::moved, this, &Dungeon::moveNPCs);
 }
 
 void Dungeon::reset()
@@ -13,7 +14,7 @@ void Dungeon::reset()
 
 }
 
-AbstractMapItem *Dungeon::getObjectAtIndex(const QModelIndex &index)
+AbstractMapItem *Dungeon::getObjectAtIndex(const QModelIndex &index) const
 {
     return m_objects.value(index, 0);
 }
@@ -52,9 +53,14 @@ void Dungeon::moveObject(const QModelIndex &srcIndex, const QModelIndex &destina
 
 void Dungeon::removeObjectAtIndex(const QModelIndex &index)
 {
-    //    m_objects.remove(index);
     delete m_objects.take(index);
     emit objectRemoved(index);
+}
+
+bool Dungeon::isWall(const QModelIndex &index) const
+{
+    AbstractMapItem* item = getObjectAtIndex(index);
+    return qobject_cast<Obstacle*>(item);
 }
 
 void Dungeon::onTurnPassed()

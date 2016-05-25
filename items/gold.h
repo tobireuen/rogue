@@ -9,7 +9,7 @@ class Gold : public AbstractCollectibleItem
 public:
     Gold(QObject *parent = 0);
 
-    virtual bool onEntered();
+    virtual bool onEntered() const final;
 
     virtual QChar appearance() const;
 };

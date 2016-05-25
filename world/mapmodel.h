@@ -39,7 +39,7 @@ public slots:
 protected:
 
     void collectObject(const QModelIndex &index);
-    void setPlayer();
+    void setPlayer(const QModelIndex &start);
 
     QModelIndex currentPlayerIndex() const;
 

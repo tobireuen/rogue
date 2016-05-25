@@ -152,8 +152,8 @@ void MapModel::init(int rowCount, int columnCount)
     m_columnCount = columnCount;
 
     DungeonGenerator generator(this);
-    //    m_dungeon = generator.generateRooms();
-    m_dungeon = generator.generateCaves();
+    m_dungeon = generator.generateRooms();
+    //    m_dungeon = generator.generateCaves();
 
     connect(m_dungeon, &Dungeon::objectAdded, this, &MapModel::onObjectChanged);
     connect(m_dungeon, &Dungeon::objectRemoved, this, &MapModel::onObjectChanged);
@@ -162,7 +162,9 @@ void MapModel::init(int rowCount, int columnCount)
 
     m_dungeon->setParent(this);
 
-    setPlayer();
+    QModelIndex start = index(rowCount / 2, columnCount / 2);
+
+    setPlayer(start);
 
     emit layoutChanged();
 }
@@ -186,19 +188,23 @@ void MapModel::collectObject(const QModelIndex &index)
         m_dungeon->removeObjectAtIndex(index);
 }
 
-void MapModel::setPlayer()
+void MapModel::setPlayer(const QModelIndex &start)
 {
-    Randomizer rd;
-    int randomColumn = rd.randInt(1, m_columnCount - 1);
-    int randomRow = rd.randInt(1, m_rowCount - 1);
+//{
+//    Randomizer rd;
+//    int randomColumn = rd.randInt(1, m_columnCount - 1);
+//    int randomRow = rd.randInt(1, m_rowCount - 1);
 
-    if(!m_dungeon->containsObjectAtIndex(index(randomRow, randomColumn))){
-        Player::instance()->setRow(randomRow);
-        Player::instance()->setColumn(randomColumn);
-    }
-    else {
-        setPlayer();
-    }
+//    if(!m_dungeon->containsObjectAtIndex(index(randomRow, randomColumn))){
+//        Player::instance()->setRow(randomRow);
+//        Player::instance()->setColumn(randomColumn);
+//    }
+//    else {
+//        setPlayer();
+//    }
+//}
+    Player::instance()->setRow(start.row());
+    Player::instance()->setColumn(start.column());
 }
 
 QModelIndex MapModel::currentPlayerIndex() const

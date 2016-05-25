@@ -8,6 +8,10 @@
 #include <QObject>
 #include <QModelIndex>
 
+#define DEFAULT_CORRIDOR_MIN_LENGTH 3
+#define DEFAULT_CORRIDOR_MAX_LENGTH 5
+
+
 class DungeonGenerator : public QObject
 {
     Q_OBJECT
@@ -26,7 +30,22 @@ private:
 
     //Rooms
     void fillMap();
-    void createRoom(const QModelIndex &start, int width, int height);
+    QModelIndex createRoom(QPair<QModelIndex, Direction> startingPoint, int heigth, int width);
+
+    //returns index of end of corridor
+    QModelIndex createCorridor(QPair<QModelIndex, Direction> startingPoint, int length);
+
+    //returns QPair with index of wall and direction wall is facing
+    QPair<QModelIndex, Direction> selectWall(const QModelIndex &startIndex, Direction direction);
+
+    //returns true if free tiles are found in desired area
+    bool checkForRoomSpace(QPair<QModelIndex, Direction> checkCoordinates, int height, int width);
+    //returns true if free tiles are found in desired area
+    bool checkForCorridorSpace(QPair<QModelIndex, Direction> checkCoordinates, int length);
+    //returns true if index is at or beyond border
+    bool indexAtBorder(const QModelIndex &checkIndex);
+    double checkObstacleDensity();
+
 
     void createBorders();
     void placeTreasure(int hiddenTreasureLimit);
@@ -39,6 +58,7 @@ private:
 private:
     Dungeon *m_dungeon;
     QAbstractItemModel *m_model;
+
 };
 
 #endif // DUNGEONGENERATOR_H

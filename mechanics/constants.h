@@ -2,10 +2,17 @@
 #define CONSTANTS_H
 
 enum Direction {
+    Up,
+    Down,
     Left,
     Right,
-    Up,
-    Down
+    NoDirection
 };
+
+enum RoomType{
+    Room,
+    Corridor,
+};
+
 
 #endif // CONSTANTS_H

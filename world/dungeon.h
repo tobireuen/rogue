@@ -23,13 +23,15 @@ public:
 
     void reset();
 
-    AbstractMapItem* getObjectAtIndex(const QModelIndex &index);
+    AbstractMapItem* getObjectAtIndex(const QModelIndex &index) const;
 
     bool containsObjectAtIndex(const QModelIndex &index);
 
     void createObjectAtIndex(const QModelIndex &index, AbstractMapItem *itemType);
     void moveObject(const QModelIndex &srcIndex, const QModelIndex &destinationIndex);
     void removeObjectAtIndex(const QModelIndex &index);
+    //returns true if object at index is a wall
+    bool isWall(const QModelIndex& index) const;
 
 public slots:
     void onTurnPassed();

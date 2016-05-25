@@ -33,7 +33,9 @@ SOURCES += main.cpp\
     world/dungeon.cpp \
     world/dungeongenerator.cpp \
     world/mapmodel.cpp \
-    gui/playerlogwidget.cpp
+    gui/playerlogwidget.cpp \
+    world/floortile.cpp \
+    world/abstractmaptile.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/autosizetableview.h \
@@ -57,7 +59,9 @@ HEADERS  += gui/mainwindow.h \
     world/dungeon.h \
     world/dungeongenerator.h \
     world/mapmodel.h \
-    gui/playerlogwidget.h
+    gui/playerlogwidget.h \
+    world/floortile.h \
+    world/abstractmaptile.h
 
 FORMS    += gui/mainwindow.ui \
     gui/mapsizedialog.ui \
