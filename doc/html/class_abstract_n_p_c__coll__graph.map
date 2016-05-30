@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$class_abstract_combat_item.html" title="The AbstractCombatItem class is a derivative of AbstractMapItem and a base class..." alt="" coords="5,81,144,108"/>
+<area shape="rect" id="node3" href="$class_abstract_map_item.html" title="The AbstractMapItem class is a base class for all items found on the map." alt="" coords="15,5,134,32"/>
+<area shape="rect" id="node4" href="$class_move_set.html" title="The MoveSet class governs the movement behavious of an AbstractNPC." alt="" coords="169,81,239,108"/>
+</map>

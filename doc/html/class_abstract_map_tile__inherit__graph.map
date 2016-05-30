@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class_abstract_collectible_item.html" title="The AbstractCollectibleItem class is derivative of the AbstractMapTile class and..." alt="" coords="5,155,159,181"/>
+<area shape="rect" id="node5" href="$class_floor_tile.html" title="The FloorTile class is a derivative of AbstractMapTile." alt="" coords="183,155,255,181"/>
+<area shape="rect" id="node2" href="$class_abstract_map_item.html" title="The AbstractMapItem class is a base class for all items found on the map." alt="" coords="91,5,209,32"/>
+<area shape="rect" id="node4" href="$class_gold.html" title="Gold" alt="" coords="59,229,105,256"/>
+</map>

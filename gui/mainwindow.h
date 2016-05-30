@@ -15,11 +15,25 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    /**
+     * @brief Constructs a MainWindow with the given parent.
+     */
     explicit MainWindow(QWidget *parent = 0);
+
+    /**
+     * @brief Destroys the main window.
+     */
     ~MainWindow();
 
 private slots:
+    /**
+     * @brief resets and re-initializes the player and model.
+     */
     void reset();
+
+    /**
+     * @brief sets up tableView and model
+     */
     void init();
 
 private:

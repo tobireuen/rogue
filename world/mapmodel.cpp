@@ -4,6 +4,7 @@
 #include "obstacle.h"
 #include "gold.h"
 #include "dungeongenerator.h"
+#include "floortile.h"
 
 #include <QSize>
 #include <QDebug>
@@ -185,24 +186,11 @@ void MapModel::collectObject(const QModelIndex &index)
         return;
 
     if(collectible->onEntered())
-        m_dungeon->removeObjectAtIndex(index);
+        m_dungeon->createObjectAtIndex(index, new FloorTile);
 }
 
 void MapModel::setPlayer(const QModelIndex &start)
 {
-//{
-//    Randomizer rd;
-//    int randomColumn = rd.randInt(1, m_columnCount - 1);
-//    int randomRow = rd.randInt(1, m_rowCount - 1);
-
-//    if(!m_dungeon->containsObjectAtIndex(index(randomRow, randomColumn))){
-//        Player::instance()->setRow(randomRow);
-//        Player::instance()->setColumn(randomColumn);
-//    }
-//    else {
-//        setPlayer();
-//    }
-//}
     Player::instance()->setRow(start.row());
     Player::instance()->setColumn(start.column());
 }

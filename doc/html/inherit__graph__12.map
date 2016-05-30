@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$class_randomizer.html" title="The Randomizer class provides methods to generate random numbers within a given interval..." alt="" coords="5,5,96,32"/>
+<area shape="rect" id="node2" href="$class_dice.html" title="The Dice class is a derivative of the randomizer class and represents a dice roll..." alt="" coords="144,5,191,32"/>
+</map>

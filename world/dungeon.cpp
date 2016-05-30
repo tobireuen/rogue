@@ -1,4 +1,5 @@
 #include "dungeon.h"
+#include "floortile.h"
 #include "player.h"
 
 #include <obstacle.h>
@@ -61,6 +62,12 @@ bool Dungeon::isWall(const QModelIndex &index) const
 {
     AbstractMapItem* item = getObjectAtIndex(index);
     return qobject_cast<Obstacle*>(item);
+}
+
+bool Dungeon::isFloor(const QModelIndex &index) const
+{
+    AbstractMapItem* item = getObjectAtIndex(index);
+    return qobject_cast<FloorTile*>(item);
 }
 
 void Dungeon::onTurnPassed()

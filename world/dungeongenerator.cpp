@@ -46,68 +46,80 @@ Dungeon *DungeonGenerator:: generateRooms()
 
     qDebug()<<"building CENTRAL ROOM";
     coordinates.first = createRoom(coordinates, 3, 3);
-    int height = 3;
-    int width = 3;
 
+    //Setting up generator
     Randomizer rd;
-
-    coordinates = selectWall(coordinates.first, (Direction)rd.randInt(Up,Right));
-    if(!checkForRoomSpace(coordinates, height, width))
+    int totalFailCounter = 0;
+    int failStreakCounter = 0;
+    while((checkObstacleDensity() > 0.6) && (totalFailCounter < 5000))
     {
-        int length = 1;
-        coordinates.first = createCorridor(coordinates, length);
+        qDebug()<< "OBSTACLE DENSITY" << checkObstacleDensity();
+        qDebug()<< "FAILCOUNTER" << totalFailCounter;
 
-        coordinates = selectWall(coordinates.first, coordinates.second);
-        coordinates.first = createRoom(coordinates, height, width);
+        coordinates = selectWall(coordinates.first, (Direction)rd.randInt(Up,Right));
+
+        switch (rd.randInt(Room, Corridor)) {
+        case Room:
+        {
+            QPair<QModelIndex, Direction> tempCoordinates = coordinates;
+            if(!checkForCorridorSpace(tempCoordinates, 1))
+            {
+                int height = rd.randInt(2,4);
+                int width = rd.randInt(2,4);
+                if(!checkForRoomSpace(tempCoordinates, height, width))
+                {
+                    coordinates.first = createCorridor(coordinates, 1);
+                    coordinates = selectWall(coordinates.first, coordinates.second);
+                    coordinates.first = createRoom(coordinates, height, width);
+
+                    failStreakCounter = 0;
+                }
+            }
+            else //failsafe
+            {
+                totalFailCounter++;
+                failStreakCounter++;
+            }
+            break;
+        }
+        case Corridor:
+        {
+            QPair<QModelIndex, Direction> tempCoordinates = coordinates;
+            int length = rd.randInt(3, 5);
+            if(!checkForCorridorSpace(tempCoordinates, length))
+            {
+                if(!checkForCorridorSpace(tempCoordinates, length))
+                {
+                    coordinates.first = createCorridor(coordinates, length);
+
+                    failStreakCounter = 0;
+                }
+            }
+            else //failsafe
+            {
+                totalFailCounter++;
+                failStreakCounter++;
+            }
+            break;
+        }
+            break;
+        default:
+            break;
+        }
+
+        if(failStreakCounter > 10)
+        {
+            coordinates.first = roomIndex;
+            coordinates.second = NoDirection;
+            failStreakCounter = 0;
+            qDebug()<<"Failstreak reset";
+        }else
+        {
+            qDebug()<<"No Failstreak reset";
+        }
     }
-
-    //    //Setting up generator
-    //    Randomizer rd;
-    //    int totalFailCounter = 0;
-    //    int failStreakCounter = 0;
-    //    while((checkObstacleDensity() > 0.5) && (totalFailCounter < 100))
-    //    {
-    //        qDebug()<< "OBSTACLE DENSITY" << checkObstacleDensity();
-    //        qDebug()<< "FAILCOUNTER" << totalFailCounter;
-
-    //        coordinates = selectWall(coordinates.first, (Direction)rd.randInt(Up,Right));
-
-    //        qDebug()<<"coordinates after selectWall"<<coordinates;
-
-    //        QPair<QModelIndex, Direction> tempCoordinates = coordinates;
-    //        if(!checkForCorridorSpace(tempCoordinates, 1))
-    //        {
-    //            int height = rd.randInt(2,3);
-    //            int width = rd.randInt(2,3);
-    //            if(!checkForRoomSpace(tempCoordinates, height, width))
-    //            {
-    //                qDebug()<< "tempCoordinates after selectWall:"<< tempCoordinates;
-
-    //                coordinates.first = createCorridor(coordinates, 1);
-    //                coordinates = selectWall(coordinates.first, coordinates.second);
-    //                coordinates.first = createRoom(coordinates, height, width);
-
-    //                failStreakCounter = 0;
-    //            }
-    //        }
-    //        else //failsafe
-    //        {
-    //            totalFailCounter++;
-    //            failStreakCounter++;
-    //        }
-
-    //        if(failStreakCounter > 5)
-    //        {
-    //            coordinates.first = roomIndex;
-    //            coordinates.second = NoDirection;
-    //            failStreakCounter = 0;
-    //            qDebug()<<"Failstreak reset";
-    //        }else
-    //        {
-    //            qDebug()<<"No Failstreak reset";
-    //        }
-    //    }
-
+    placeTreasure(5);
+    placeMonster(1);
     qDebug()<<"DONE CREATING";
     return m_dungeon;
 }
@@ -159,7 +171,7 @@ void DungeonGenerator::placeTreasure(int hiddenTreasureLimit)
 {
     for (int row = 0; row < m_model->rowCount(); row++)
         for (int column = 0; column < m_model->columnCount(); column++)
-            if(!m_dungeon->containsObjectAtIndex(m_model->index(row, column))){
+            if(m_dungeon->isFloor(m_model->index(row, column))){
                 if(countAliveNeighbours(m_model->index(row, column)) >= hiddenTreasureLimit)
                     m_dungeon->createObjectAtIndex(m_model->index(row, column), new Gold);
             }
@@ -175,48 +187,16 @@ void DungeonGenerator::placeMonster(int monsterLimit)
     while(monsterCount < monsterLimit){
         row = rd.randInt(0, m_model->rowCount());
         column = rd.randInt(0, m_model->columnCount());
-        if(!m_dungeon->containsObjectAtIndex(m_model->index(row, column))){
+
+
+
+        if(m_dungeon->isFloor(m_model->index(row, column))){
             m_dungeon->createObjectAtIndex(m_model->index(row, column), new Monster);
             monsterCount++;
         }
     }
 }
 
-void DungeonGenerator::floodfill()
-{
-    QModelIndex firstFreeIndex;
-
-    for (int row = 0; row < m_model->rowCount() && !firstFreeIndex.isValid(); row++) {
-        for (int column = 0; column < m_model->columnCount() && !firstFreeIndex.isValid(); column++) {
-            QModelIndex current = m_model->index(row, column);
-            if (!m_dungeon->containsObjectAtIndex(current))
-                firstFreeIndex = current;
-        }
-    }
-
-    QHash <QModelIndex, bool> floodIndex;
-    colorIndex(floodIndex, firstFreeIndex);
-    qDebug() << floodIndex.size();
-}
-
-void DungeonGenerator::colorIndex(QHash<QModelIndex, bool> &hash, const QModelIndex &index)
-{
-    if(!index.isValid() || index.row() >= m_model->rowCount() || index.column() >= m_model->columnCount())
-        return;
-
-    if(hash.value(index, false))
-        return;
-
-    if(m_dungeon->containsObjectAtIndex(index))
-        return;
-
-    hash.insert(index, true);
-
-    colorIndex(hash, m_model->index(index.row() + 1, index.column()));
-    colorIndex(hash, m_model->index(index.row() - 1, index.column()));
-    colorIndex(hash, m_model->index(index.row(), index.column() + 1));
-    colorIndex(hash, m_model->index(index.row(), index.column() - 1));
-}
 
 int DungeonGenerator::countAliveNeighbours(const QModelIndex &index)
 {
@@ -226,7 +206,7 @@ int DungeonGenerator::countAliveNeighbours(const QModelIndex &index)
             QModelIndex neighbour = m_model->index(row, column);
             if(!index.isValid() || index == neighbour)
                 continue;
-            if(m_dungeon->containsObjectAtIndex(neighbour))
+            if(m_dungeon->isWall(neighbour))
                 count++;
         }
     return count;
@@ -459,7 +439,7 @@ bool DungeonGenerator::checkForCorridorSpace(QPair<QModelIndex, Direction> check
             {
                 qDebug() << m_model->index(row,column);
                 {
-                    if(!m_dungeon->isWall(m_model->index(row, column)) /*|| indexAtBorder(m_model->index(row, column))*/)
+                    if(!m_dungeon->isWall(m_model->index(row, column)) || indexAtBorder(m_model->index(row, column)))
                     {
                         qDebug() << "NOT enough space for corridorcreation";
                         return true;
@@ -470,7 +450,7 @@ bool DungeonGenerator::checkForCorridorSpace(QPair<QModelIndex, Direction> check
     case Down:
         for(int row = roomIndex.row(); row < roomIndex.row() + length; row++)
             for(int column = roomIndex.column() - 1; column <= roomIndex.column() + 1; column++)
-                if(!m_dungeon->isWall(m_model->index(row, column)) /*|| indexAtBorder(m_model->index(row, column))*/)
+                if(!m_dungeon->isWall(m_model->index(row, column)) || indexAtBorder(m_model->index(row, column)))
                 {
                     qDebug() << m_model->index(row,column);
                     {
@@ -484,7 +464,7 @@ bool DungeonGenerator::checkForCorridorSpace(QPair<QModelIndex, Direction> check
             for(int row = roomIndex.row() - 1; row <= roomIndex.row() + 1; row++)
             {
                 qDebug() << m_model->index(row,column);
-                if(!m_dungeon->isWall(m_model->index(row, column)) /*|| indexAtBorder(m_model->index(row, column))*/)
+                if(!m_dungeon->isWall(m_model->index(row, column)) || indexAtBorder(m_model->index(row, column)))
                 {
                     qDebug() << "NOT enough space for corridorcreation";
                     return true;
@@ -497,7 +477,7 @@ bool DungeonGenerator::checkForCorridorSpace(QPair<QModelIndex, Direction> check
             {
                 qDebug() << m_model->index(row,column);
 
-                if(!m_dungeon->isWall(m_model->index(row, column)) /*|| indexAtBorder(m_model->index(row, column))*/)
+                if(!m_dungeon->isWall(m_model->index(row, column)) || indexAtBorder(m_model->index(row, column)))
                 {
                     qDebug() << "NOT enough space for corridorcreation";
                     return true;
@@ -515,9 +495,9 @@ bool DungeonGenerator::checkForCorridorSpace(QPair<QModelIndex, Direction> check
 bool DungeonGenerator::indexAtBorder(const QModelIndex &checkIndex)
 {
     if (checkIndex.row() <= 0
-            || checkIndex.row() >= m_model->rowCount()
+            || checkIndex.row() >= m_model->rowCount() - 1
             || checkIndex.column() <= 0
-            || checkIndex.column() >= m_model->columnCount())
+            || checkIndex.column() >= m_model->columnCount() - 1)
         return true;
     else return false;
 }

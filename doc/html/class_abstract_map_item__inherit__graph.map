@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$class_abstract_combat_item.html" title="The AbstractCombatItem class is a derivative of AbstractMapItem and a base class..." alt="" coords="75,80,214,107"/>
+<area shape="rect" id="node6" href="$class_abstract_map_tile.html" title="The AbstractMapTile class is a derivative of AbstractMapItem and a baseclass for..." alt="" coords="238,80,353,107"/>
+<area shape="rect" id="node10" href="$class_obstacle.html" title="Obstacle" alt="" coords="377,80,448,107"/>
+<area shape="rect" id="node3" href="$class_abstract_n_p_c.html" title="The AbstractNPC class is a derivative of AbstractCombatItem and a base class for..." alt="" coords="5,155,97,181"/>
+<area shape="rect" id="node5" href="$class_player.html" title="The Player class is singleton class which is derived from AbstractCombatItem and..." alt="" coords="121,155,179,181"/>
+<area shape="rect" id="node4" href="$class_monster.html" title="Monster" alt="" coords="17,229,85,256"/>
+<area shape="rect" id="node7" href="$class_abstract_collectible_item.html" title="The AbstractCollectibleItem class is derivative of the AbstractMapTile class and..." alt="" coords="213,155,367,181"/>
+<area shape="rect" id="node9" href="$class_floor_tile.html" title="The FloorTile class is a derivative of AbstractMapTile." alt="" coords="391,155,463,181"/>
+<area shape="rect" id="node8" href="$class_gold.html" title="Gold" alt="" coords="267,229,313,256"/>
+</map>
